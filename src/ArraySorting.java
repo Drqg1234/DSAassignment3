@@ -1,10 +1,11 @@
+// Mamaguevo, digo glug glug glug glug
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Consumer;
 
 public class ArraySorting {
     // Insertion sort
-    public void insertionSort(int[] arr){
+    public static void insertionSort(int[] arr){
 
         for (int i = 1; i < arr.length; i++){
             int key = arr[i];
@@ -186,13 +187,8 @@ public class ArraySorting {
         return arr;
     }
 
-    public static long getMemoryUsage(){
-        Runtime rt = Runtime.getRuntime();
-        return rt.totalMemory() - rt.freeMemory();
-    }
-
     public static void testSorts(int size){
-        System.out.println("Array Size: " + size);
+        System.out.println("<---------------Array Size: " + size + "--------------->");
         
         int[] random = generateArray(size);
         int[] nearly = generateNearlySortedArray(size);
@@ -204,33 +200,42 @@ public class ArraySorting {
     }
 
     public static void testArray(String name, int[] originalArr){
-        System.out.println("Currently Testing: " + name);
+        System.out.println("\nCurrently Testing Array: " + name);
+        System.out.printf("%-25s %8s %5s\n", "Sort", "Time(ms)", "Memory(KB)");
+        System.out.println("----------------------------------------------");
 
         testSortingAlgorithm("Insertion: ", originalArr, ArraySorting::insertionSort);
         testSortingAlgorithm("Heap: ", originalArr, ArraySorting::heapSort);
         testSortingAlgorithm("Merge: ", originalArr, ArraySorting::mergeSort);
         testSortingAlgorithm("Quick: ", originalArr, ArraySorting::quickSort);
 
-        testSortingAlgorithm("Quick (cutoff at 10): ", originalArr, arr -> quickSortCutoff(arr, 10));
-        testSortingAlgorithm("Quick (cutoff at 50): ", originalArr, arr -> quickSortCutoff(arr, 50));
+        testSortingAlgorithm("Quick (cutoff at  10): ", originalArr, arr -> quickSortCutoff(arr, 10));
+        testSortingAlgorithm("Quick (cutoff at  50): ", originalArr, arr -> quickSortCutoff(arr, 50));
         testSortingAlgorithm("Quick (cutoff at 200): ", originalArr, arr -> quickSortCutoff(arr, 200));
     }
 
     public static void testSortingAlgorithm(String name, int[] originalArr, Consumer<int[]> sorter){
         int[] arr = Arrays.copyOf(originalArr, originalArr.length);
-
-        long memoryBefore = getMemoryUsage();
-        long start = System.nanoTime();
-
-        sorter.accept(arr);
-
-        long end = System.nanoTime();
-        long memoryAfter = getMemoryUsage();
-
-        double time = (end - start) / 1_000_000.0;
-        long memoryUsed = memoryAfter - memoryBefore;
-
         
+        System.gc();
+        
+        Runtime rt = Runtime.getRuntime();
+        long usedMemoryBefore = rt.totalMemory() - rt.freeMemory();
+        
+        long timeStart = System.nanoTime();
+        
+        sorter.accept(arr);
+        
+        long timeEnd = System.nanoTime();
+        
+        long usedMemoryAfter = rt.totalMemory() - rt.freeMemory();
+        
+        double time = (timeEnd - timeStart) / 1_000_000.0;
+        double memoryUsed = (usedMemoryAfter - usedMemoryBefore) / 1024.0; 
+        
+        memoryUsed = Math.max(0, memoryUsed);
+        
+        System.out.printf("%-25s %8.2f %10.2f\n", name, time, memoryUsed);
     }
 
     public static void main(String[] args) {
@@ -238,6 +243,7 @@ public class ArraySorting {
 
         for (int size : arraySizes){
             testSorts(size);
+            System.out.println();
         }
     }
 }
