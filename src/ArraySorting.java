@@ -1,4 +1,6 @@
-// Mamaguevo, digo glug glug glug glug
+// The array sorting class which contains all sorts (insertion, heap, merge, quick) and tests their time and memory usage throughout multiple lengths and arrangement of arrays
+// For my method of testing, I used the Consumer class to make testing more simple. It allows for the method calls to be stored and brought out with one command sorter.accept().
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -142,17 +144,36 @@ public class ArraySorting {
         }
     }
     public static int partition(int[] arr, int low, int high){
-        int pivot = arr[high];
-        int i = low - 1;
-        for (int j = low; j < high; j++){
-            if (arr[j] < pivot){
-                i++;
-                swap(arr, i, j);
-            }
+        // Median of three approach to choosing pivot
+        int mid = low + (high - low) / 2;
+
+        if (arr[low] > arr[mid]){
+            swap(arr, low, mid);
+        }
+        if (arr[low] > arr[high]){
+            swap(arr, low, high);
+        }
+        if (arr[mid] > arr[high]){
+            swap(arr, mid, high);
         }
 
-        swap(arr, i + 1, high);
-        return i + 1;
+        swap(arr, mid, high - 1);
+        int pivot = arr[high - 1];
+
+        int i = low;
+        int j = high - 1;
+
+        while (true){
+            while (arr[i++] < pivot);
+            while (arr[j--] > pivot);
+
+            if (i >= j){
+                break;
+            }
+            swap(arr, i, j);
+        }
+        swap(arr, i, high - 1);
+        return i;
     }
     public static void swap(int[] arr, int i , int j){
         int temp = arr[i];

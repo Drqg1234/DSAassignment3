@@ -1,18 +1,29 @@
-## Getting Started
+# Assignment 3 Report
+Name: `Jonathan Rodriguez`
+NetID: `jdr220004`
+Section: `501`
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Implementations
 
-## Folder Structure
+### Insertion
+- Standard insertion sort implementation with nested loops
+- Best: `O(n)`
+- Avg and Worst: `O(n^2)`
 
-The workspace contains two folders by default, where:
+### Heap
+- Standard heap sort with heapify operation
+- All cases: `O(nlogn)` --> building the heap takes `O(n)` time and heapify takes `O(logn)` time
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+### Merge 
+- Recursive merge sort using divide and conquer
+- All cases: `O(nlogn)` --> divides array in half, `O(logn)`, and regroups it, `O(n)`
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+### Quick and Cutoff- Median of Three
+- Uses the median of three pivot selection on both the normal Quicksort and the cutoff version
+- Best and Avg case: `O(nlogn)`
+- Worst: `O(n^2)` for normal quicksort and `O(n^2 + k)` for the insertion cutoff
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## Graphs
+![alt text](graph_1.PNG)
+![alt text](graph_2.PNG)
+![alt text](graph_3.PNG)
